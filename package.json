@@ -1,0 +1,15 @@
+{
+  "name": "moonshot-bullet-hell",
+  "version": "0.1.0",
+  "description": "Game Off 2020 Moonshot Bullet Hell Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["game", "game off", "GitHub", "2020", "game jam", "phaser", "browser", "Moonshot", "bullet hell"],
+  "author": "Beau Harrison <beauharrison@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.24.1"
+  }
+}
