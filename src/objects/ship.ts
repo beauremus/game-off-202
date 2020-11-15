@@ -1,5 +1,5 @@
 import { Bullet } from "../objects/bullet";
-import { CONST } from "../const/const";
+import { consts } from "../state/state";
 
 type Params = {
   scene: Phaser.Scene;
@@ -45,8 +45,8 @@ export class Ship extends Phaser.GameObjects.Graphics {
 
     if (this.body instanceof Phaser.Physics.Arcade.Body) {
       this.body.allowGravity = false;
-      this.body.setSize(CONST.SHIP_SIZE * 2, CONST.SHIP_SIZE * 2);
-      this.body.setOffset(-CONST.SHIP_SIZE, -CONST.SHIP_SIZE);
+      this.body.setSize(consts.SHIP_SIZE * 2, consts.SHIP_SIZE * 2);
+      this.body.setOffset(-consts.SHIP_SIZE, -consts.SHIP_SIZE);
     }
 
     this.scene.add.existing(this);
@@ -75,17 +75,17 @@ export class Ship extends Phaser.GameObjects.Graphics {
 
   private checkIfOffScreen(): void {
     // horizontal check
-    if (this.x > this.scene.sys.canvas.width + CONST.SHIP_SIZE) {
-      this.x = -CONST.SHIP_SIZE;
-    } else if (this.x < -CONST.SHIP_SIZE) {
-      this.x = this.scene.sys.canvas.width + CONST.SHIP_SIZE;
+    if (this.x > this.scene.sys.canvas.width + consts.SHIP_SIZE) {
+      this.x = -consts.SHIP_SIZE;
+    } else if (this.x < -consts.SHIP_SIZE) {
+      this.x = this.scene.sys.canvas.width + consts.SHIP_SIZE;
     }
 
     // vertical check
-    if (this.y > this.scene.sys.canvas.height + CONST.SHIP_SIZE) {
-      this.y = -CONST.SHIP_SIZE;
-    } else if (this.y < -CONST.SHIP_SIZE) {
-      this.y = this.scene.sys.canvas.height + CONST.SHIP_SIZE;
+    if (this.y > this.scene.sys.canvas.height + consts.SHIP_SIZE) {
+      this.y = -consts.SHIP_SIZE;
+    } else if (this.y < -consts.SHIP_SIZE) {
+      this.y = this.scene.sys.canvas.height + consts.SHIP_SIZE;
     }
   }
 
@@ -99,12 +99,12 @@ export class Ship extends Phaser.GameObjects.Graphics {
     this.lineStyle(1, 0xffffff);
 
     this.strokeTriangle(
-      -CONST.SHIP_SIZE,
-      CONST.SHIP_SIZE,
-      CONST.SHIP_SIZE,
-      CONST.SHIP_SIZE,
+      -consts.SHIP_SIZE,
+      consts.SHIP_SIZE,
+      consts.SHIP_SIZE,
+      consts.SHIP_SIZE,
       0,
-      -CONST.SHIP_SIZE
+      -consts.SHIP_SIZE
     );
   }
 

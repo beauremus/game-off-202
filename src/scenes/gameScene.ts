@@ -1,6 +1,6 @@
 import { Asteroid } from "../objects/asteroid";
 import { Ship } from "../objects/ship";
-import { CONST } from "../const/const"
+import { vars, consts } from "../state/state"
 
 export class GameScene extends Phaser.Scene {
     private player!: Ship;
@@ -53,7 +53,7 @@ export class GameScene extends Phaser.Scene {
                 break;
         }
 
-        CONST.SCORE = this.score;
+        vars.SCORE = this.score;
         this.bitmapTexts[0].text = "" + this.score;
     }
 
@@ -91,9 +91,9 @@ export class GameScene extends Phaser.Scene {
 
         this.player = new Ship({ scene: this, opt: {} });
         this.asteroids = [];
-        this.numberOfAsteroids = CONST.ASTEROID_COUNT;
+        this.numberOfAsteroids = consts.ASTEROID_COUNT;
         this.spawnAsteroids(this.numberOfAsteroids, 3);
-        this.score = CONST.SCORE;
+        this.score = vars.SCORE;
         this.bitmapTexts = [];
         this.bitmapTexts.push(
             this.add.bitmapText(
@@ -130,10 +130,10 @@ export class GameScene extends Phaser.Scene {
 
             if (!this.asteroids[i].active) {
                 this.spawnAsteroids(
-                3,
-                this.asteroids[i].getSize() - 1,
-                this.asteroids[i].x,
-                this.asteroids[i].y
+                    3,
+                    this.asteroids[i].getSize() - 1,
+                    this.asteroids[i].x,
+                    this.asteroids[i].y
                 );
                 this.asteroids[i].destroy();
                 this.asteroids.splice(i, 1);
@@ -155,9 +155,9 @@ export class GameScene extends Phaser.Scene {
 
         // if player got hit
         if (this.gotHit) {
-            CONST.LIVES--;
+            vars.LIVES--;
 
-            if (CONST.LIVES > 0) {
+            if (vars.LIVES > 0) {
                 this.scene.start("GameScene");
             } else {
                 this.scene.start("MainMenuScene");

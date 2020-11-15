@@ -1,8 +1,11 @@
-export let CONST = {
-  SHIP_SIZE: 20,
+let vars = {
   SCORE: 0,
   HIGHSCORE: 0,
   LIVES: 3,
+}
+
+const consts = {
+  SHIP_SIZE: 20,
   ASTEROID_COUNT: 3,
   ASTEROID: {
     LARGE: {
@@ -25,3 +28,8 @@ export let CONST = {
     },
   },
 };
+
+export {
+  vars,
+  consts
+}

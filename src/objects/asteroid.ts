@@ -1,4 +1,4 @@
-import { CONST } from "../const/const";
+import { consts } from "../state/state";
 
 interface Params extends Phaser.Types.GameObjects.Graphics.Options {
   scene: Phaser.Scene;
@@ -7,12 +7,12 @@ interface Params extends Phaser.Types.GameObjects.Graphics.Options {
 
 export class Asteroid extends Phaser.GameObjects.Graphics {
   private velocity: Phaser.Math.Vector2 = this.getRandomVelocity(
-    CONST.ASTEROID.LARGE.MINSPEED,
-    CONST.ASTEROID.LARGE.MAXSPEED
+    consts.ASTEROID.LARGE.MINSPEED,
+    consts.ASTEROID.LARGE.MAXSPEED
   );
   private radius: number = Phaser.Math.RND.between(
-    CONST.ASTEROID.LARGE.MAXSIZE,
-    CONST.ASTEROID.LARGE.MINSIZE
+    consts.ASTEROID.LARGE.MAXSIZE,
+    consts.ASTEROID.LARGE.MINSIZE
   );
   private asteroidRadius: number;
   private sizeOfAsteroid: number;
@@ -55,36 +55,36 @@ export class Asteroid extends Phaser.GameObjects.Graphics {
       switch (aSizeOfAsteroid) {
         case 3: {
           this.radius = Phaser.Math.RND.between(
-            CONST.ASTEROID.LARGE.MAXSIZE,
-            CONST.ASTEROID.LARGE.MINSIZE
+            consts.ASTEROID.LARGE.MAXSIZE,
+            consts.ASTEROID.LARGE.MINSIZE
           );
           this.velocity = this.getRandomVelocity(
-            CONST.ASTEROID.LARGE.MINSPEED,
-            CONST.ASTEROID.LARGE.MAXSPEED
+            consts.ASTEROID.LARGE.MINSPEED,
+            consts.ASTEROID.LARGE.MAXSPEED
           );
           break;
         }
 
         case 2: {
           this.radius = Phaser.Math.RND.between(
-            CONST.ASTEROID.MEDIUM.MAXSIZE,
-            CONST.ASTEROID.MEDIUM.MINSIZE
+            consts.ASTEROID.MEDIUM.MAXSIZE,
+            consts.ASTEROID.MEDIUM.MINSIZE
           );
           this.velocity = this.getRandomVelocity(
-            CONST.ASTEROID.MEDIUM.MINSPEED,
-            CONST.ASTEROID.MEDIUM.MAXSPEED
+            consts.ASTEROID.MEDIUM.MINSPEED,
+            consts.ASTEROID.MEDIUM.MAXSPEED
           );
           break;
         }
 
         case 1: {
           this.radius = Phaser.Math.RND.between(
-            CONST.ASTEROID.SMALL.MAXSIZE,
-            CONST.ASTEROID.SMALL.MINSIZE
+            consts.ASTEROID.SMALL.MAXSIZE,
+            consts.ASTEROID.SMALL.MINSIZE
           );
           this.velocity = this.getRandomVelocity(
-            CONST.ASTEROID.SMALL.MINSPEED,
-            CONST.ASTEROID.SMALL.MAXSPEED
+            consts.ASTEROID.SMALL.MINSPEED,
+            consts.ASTEROID.SMALL.MAXSPEED
           );
           break;
         }
@@ -134,17 +134,17 @@ export class Asteroid extends Phaser.GameObjects.Graphics {
 
   private checkIfOffScreen(): void {
     // horizontal check
-    if (this.x > this.scene.sys.canvas.width + CONST.SHIP_SIZE) {
-      this.x = -CONST.SHIP_SIZE;
-    } else if (this.x < -CONST.SHIP_SIZE) {
-      this.x = this.scene.sys.canvas.width + CONST.SHIP_SIZE;
+    if (this.x > this.scene.sys.canvas.width + consts.SHIP_SIZE) {
+      this.x = -consts.SHIP_SIZE;
+    } else if (this.x < -consts.SHIP_SIZE) {
+      this.x = this.scene.sys.canvas.width + consts.SHIP_SIZE;
     }
 
     // vertical check
-    if (this.y > this.scene.sys.canvas.height + CONST.SHIP_SIZE) {
-      this.y = -CONST.SHIP_SIZE;
-    } else if (this.y < -CONST.SHIP_SIZE) {
-      this.y = this.scene.sys.canvas.height + CONST.SHIP_SIZE;
+    if (this.y > this.scene.sys.canvas.height + consts.SHIP_SIZE) {
+      this.y = -consts.SHIP_SIZE;
+    } else if (this.y < -consts.SHIP_SIZE) {
+      this.y = this.scene.sys.canvas.height + consts.SHIP_SIZE;
     }
   }
 
