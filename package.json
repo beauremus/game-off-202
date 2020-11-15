@@ -8,7 +8,25 @@
     "postbuild": "copyfiles -u 1 src/assets/**/* src/index.html dist",
     "watch": "npm run postbuild && rollup --watch --config rollup.config.dev.js"
   },
-  "keywords": ["game", "game off", "GitHub", "2020", "game jam", "phaser", "browser", "Moonshot", "bullet hell"],
+  "keywords": [
+    "Phaser",
+    "Phaser 3",
+    "Phaser3",
+    "TypeScript",
+    "Webpack",
+    "Game Examples",
+    "Phaser-game",
+    "Phaser-framework",
+    "Phaser3-example",
+    "Game",
+    "Game off",
+    "GitHub",
+    "2020",
+    "Game Jam",
+    "Browser",
+    "Moonshot",
+    "Bullet Hell"
+  ],
   "author": "Beau Harrison <beauharrison@gmail.com>",
   "license": "MIT",
   "dependencies": {
