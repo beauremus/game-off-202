@@ -67,7 +67,7 @@ export class Ship extends Phaser.GameObjects.Graphics {
     this.velocity.scale(0.98);
   }
 
-  private boost(): void {
+  private accelerate(): Phaser.Math.Vector2 {
     // create the force in the correct direction
     let force = new Phaser.Math.Vector2(
       Math.cos(this.rotation - Math.PI / 2),
@@ -75,8 +75,15 @@ export class Ship extends Phaser.GameObjects.Graphics {
     );
 
     // reduce the force and apply it to the velocity
-    force.scale(0.12);
-    this.velocity.add(force);
+    return force.scale(0.12);
+  }
+
+  private boost(): void {
+    this.velocity.add(this.accelerate());
+  }
+
+  private slow(): void {
+    this.velocity.subtract(this.accelerate());
   }
 
   private checkIfOffScreen(): void {
@@ -139,6 +146,10 @@ export class Ship extends Phaser.GameObjects.Graphics {
   private handleInput(): void {
     if (this.cursors.up.isDown) {
       this.boost();
+    }
+
+    if (this.cursors.down.isDown) {
+      this.slow();
     }
 
     if (this.cursors.right.isDown) {
