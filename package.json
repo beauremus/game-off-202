@@ -2,14 +2,26 @@
   "name": "moonshot-bullet-hell",
   "version": "0.1.0",
   "description": "Game Off 2020 Moonshot Bullet Hell Game",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "rollup --config rollup.config.dev.js",
+    "build": "rollup --config rollup.config.dist.js",
+    "postbuild": "copyfiles -u 1 src/assets/**/* src/index.html dist",
+    "watch": "npm run postbuild && rollup --watch --config rollup.config.dev.js"
   },
   "keywords": ["game", "game off", "GitHub", "2020", "game jam", "phaser", "browser", "Moonshot", "bullet hell"],
   "author": "Beau Harrison <beauharrison@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "phaser": "^3.24.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.4",
+    "copyfiles": "^2.4.0",
+    "rollup": "^2.33.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.0.5"
   }
 }
