@@ -59,7 +59,7 @@ export class Ship extends Phaser.GameObjects.Graphics {
   }
 
   private applyForces(): void {
-    // apple velocity to position
+    // apply velocity to position
     this.x += this.velocity.x;
     this.y += this.velocity.y;
 
