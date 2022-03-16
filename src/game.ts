@@ -1,3 +1,4 @@
+// This game borrows heavily from https://github.com/digitsensitive/phaser3-typescript/tree/master/src/games/asteroid
 import 'phaser';
 import { GameScene } from './scenes/gameScene';
 
