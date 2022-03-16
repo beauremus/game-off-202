@@ -1,7 +1,7 @@
 let vars = {
-  SCORE: 0,
-  HIGHSCORE: 0,
-  LIVES: 3,
+  score: 0,
+  highscore: 0,
+  lives: 3,
 }
 
 const consts = {

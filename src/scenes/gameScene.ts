@@ -1,10 +1,13 @@
 import { Asteroid } from "../objects/asteroid";
+import { Moon } from "../objects/moon";
 import { Ship } from "../objects/ship";
 import { vars, consts } from "../state/state"
 
 export class GameScene extends Phaser.Scene {
     private player!: Ship;
-    private asteroids!: Asteroid[];
+    // private asteroids!: Asteroid[];
+    private moon!: Moon;
+    private asteroid!: Asteroid;
     private numberOfAsteroids!: number;
     private score!: number;
     private bitmapTexts!: Phaser.GameObjects.BitmapText[];
@@ -14,30 +17,70 @@ export class GameScene extends Phaser.Scene {
         super(`GameScene`)
     }
 
-    private spawnAsteroids(
-        aAmount: number,
+    // private spawnAsteroids(
+    //     aAmount: number,
+    //     aSize: number,
+    //     aX?: number,
+    //     aY?: number
+    // ) {
+    //     if (aSize > 0) {
+    //         for (let i = 0; i < aAmount; i++) {
+    //             this.asteroids.push(
+    //                 new Asteroid({
+    //                     scene: this,
+    //                     x:
+    //                         aX === undefined
+    //                         ? this.getRandomSpawnPosition(this.sys.canvas.width)
+    //                         : aX,
+    //                     y:
+    //                         aY === undefined
+    //                         ? this.getRandomSpawnPosition(this.sys.canvas.height)
+    //                         : aY,
+    //                     size: aSize
+    //                 })
+    //             );
+    //         }
+    //     }
+    // }
+
+    private spawnMoon(
         aSize: number,
         aX?: number,
         aY?: number
-    ) {
-        if (aSize > 0) {
-            for (let i = 0; i < aAmount; i++) {
-                this.asteroids.push(
-                    new Asteroid({
-                        scene: this,
-                        x:
-                            aX === undefined
-                            ? this.getRandomSpawnPosition(this.sys.canvas.width)
-                            : aX,
-                        y:
-                            aY === undefined
-                            ? this.getRandomSpawnPosition(this.sys.canvas.height)
-                            : aY,
-                        size: aSize
-                    })
-                );
-            }
-        }
+    ): Moon | null {
+        if (aSize <= 0) return null
+
+        const { width: canvasWidth, height: canvasHeight } = this.sys.canvas;
+        console.log({ canvasWidth, canvasHeight, aX, aY })
+
+        this.moon = new Moon({
+            scene: this,
+            x: aX || this.getRandomSpawnPosition(this.sys.canvas.width),
+            y: aY || this.getRandomSpawnPosition(this.sys.canvas.height),
+            size: aSize
+        })
+
+        return this.moon
+    }
+
+    private spawnAsteroid(
+        aSize: number,
+        aX?: number,
+        aY?: number
+    ): Asteroid | null {
+        if (aSize <= 0) return null
+
+        const { width: canvasWidth, height: canvasHeight } = this.sys.canvas;
+        console.log({ canvasWidth, canvasHeight, aX, aY })
+
+        this.asteroid = new Asteroid({
+            scene: this,
+            x: aX || this.getRandomSpawnPosition(this.sys.canvas.width),
+            y: aY || this.getRandomSpawnPosition(this.sys.canvas.height),
+            size: aSize
+        })
+
+        return this.asteroid
     }
 
     private updateScore(aSizeOfAsteroid: number) {
@@ -53,7 +96,7 @@ export class GameScene extends Phaser.Scene {
                 break;
         }
 
-        vars.SCORE = this.score;
+        vars.score = this.score;
         this.bitmapTexts[0].text = "" + this.score;
     }
 
@@ -79,10 +122,11 @@ export class GameScene extends Phaser.Scene {
 
     create(): void {
         const earth = this.add.image(this.sys.canvas.width/2, this.sys.canvas.height/2, 'earth')
-        const moon = this.add.image(-200, this.sys.canvas.height/2, 'moon')
+        const moonImg = this.add.image(-200, this.sys.canvas.height/2, 'moon')
+        console.log(this.sys.canvas.height/2)
 
         this.tweens.add({
-            targets: moon,
+            targets: moonImg,
             x: this.sys.canvas.width+200,
             duration: 4000,
             ease: 'Expo.inOut',
@@ -90,10 +134,17 @@ export class GameScene extends Phaser.Scene {
         })
 
         this.player = new Ship({ scene: this, opt: {} });
-        this.asteroids = [];
+        // this.asteroids = [];
         this.numberOfAsteroids = consts.ASTEROID_COUNT;
-        this.spawnAsteroids(this.numberOfAsteroids, 3);
-        this.score = vars.SCORE;
+        // this.spawnAsteroids(this.numberOfAsteroids, 3);
+        const moonSize = 3;
+        const { width: canvasWidth, height: canvasHeight } = this.sys.canvas;
+        console.log({ canvasWidth, canvasHeight })
+        this.spawnMoon(moonSize);
+        this.spawnAsteroid(3);
+        // this.spawnMoon(moonSize, 0, 300);
+
+        this.score = vars.score;
         this.bitmapTexts = [];
         this.bitmapTexts.push(
             this.add.bitmapText(
@@ -110,62 +161,119 @@ export class GameScene extends Phaser.Scene {
     update(): void {
         this.player.update();
 
-        // check collision between asteroids and bullets
-        for (let i = 0; i < this.asteroids.length; i++) {
-            for (let bullet of this.player.getBullets()) {
-                const bulletBody = bullet.getBody() as Phaser.Physics.Arcade.Body
-                const asteroidBody = this.asteroids[i].getBody() as Phaser.Physics.Arcade.Body
-                if (
-                    Phaser.Geom.Intersects.RectangleToRectangle(
-                        bulletBody.customBoundsRectangle,
-                        asteroidBody.customBoundsRectangle
-                    )
-                ) {
-                    bullet.setActive(false);
-                    this.asteroids[i].setActive(false);
-                    this.updateScore(this.asteroids[i].getSize());
-                }
-            }
-            this.asteroids[i].update();
+        // // check collision between asteroids and bullets
+        // for (let i = 0; i < this.asteroids.length; i++) {
+        //     for (let bullet of this.player.getBullets()) {
+        //         const bulletBody = bullet.getBody() as Phaser.Physics.Arcade.Body
+        //         const asteroidBody = this.asteroids[i].getBody() as Phaser.Physics.Arcade.Body
+        //         if (
+        //             Phaser.Geom.Intersects.RectangleToRectangle(
+        //                 bulletBody.customBoundsRectangle,
+        //                 asteroidBody.customBoundsRectangle
+        //             )
+        //         ) {
+        //             bullet.setActive(false);
+        //             this.asteroids[i].setActive(false);
+        //             this.updateScore(this.asteroids[i].getSize());
+        //         }
+        //     }
+        //     this.asteroids[i].update();
 
-            if (!this.asteroids[i].active) {
-                this.spawnAsteroids(
-                    3,
-                    this.asteroids[i].getSize() - 1,
-                    this.asteroids[i].x,
-                    this.asteroids[i].y
-                );
-                this.asteroids[i].destroy();
-                this.asteroids.splice(i, 1);
-            }
-        }
+        //     if (!this.asteroids[i].active) {
+        //         this.spawnAsteroids(
+        //             3,
+        //             this.asteroids[i].getSize() - 1,
+        //             this.asteroids[i].x,
+        //             this.asteroids[i].y
+        //         );
+        //         this.asteroids[i].destroy();
+        //         this.asteroids.splice(i, 1);
+        //     }
+        // }
 
-        // check collision between asteroids and ship
-        for (let i = 0; i < this.asteroids.length; i++) {
+        for (let bullet of this.player.getBullets()) {
+            const bulletBody = bullet.getBody() as Phaser.Physics.Arcade.Body
+            const moonBody = this.moon.getBody() as Phaser.Physics.Arcade.Body
             if (
                 Phaser.Geom.Intersects.RectangleToRectangle(
-                this.asteroids[i].getBody(),
-                this.player.getBody()
+                    bulletBody.customBoundsRectangle,
+                    moonBody.customBoundsRectangle
                 )
             ) {
-                this.player.setActive(false);
-                this.gotHit = true;
+                bullet.setActive(false);
+                this.moon.setActive(false);
+                this.updateScore(this.moon.getSize());
             }
+        }
+        this.moon.update();
+        this.asteroid.update();
+
+        if (!this.moon.active) {
+            this.spawnMoon(
+                this.moon.getSize() - 1,
+                this.moon.x,
+                this.moon.y
+            );
+            this.moon.destroy();
+        }
+
+        if (!this.asteroid.active) {
+            this.spawnAsteroid(
+                this.asteroid.getSize() - 1,
+                this.asteroid.x,
+                this.asteroid.y
+            );
+            this.asteroid.destroy();
+        }
+
+        // // check collision between asteroids and ship
+        // for (let i = 0; i < this.asteroids.length; i++) {
+        //     if (
+        //         Phaser.Geom.Intersects.RectangleToRectangle(
+        //         this.asteroids[i].getBody(),
+        //         this.player.getBody()
+        //         )
+        //     ) {
+        //         this.player.setActive(false);
+        //         this.gotHit = true;
+        //     }
+        // }
+
+        if (
+            Phaser.Geom.Intersects.RectangleToRectangle(
+            this.moon.getBody(),
+            this.player.getBody()
+            )
+        ) {
+            this.player.setActive(false);
+            this.gotHit = true;
+        }
+
+        if (
+            Phaser.Geom.Intersects.RectangleToRectangle(
+            this.asteroid.getBody(),
+            this.player.getBody()
+            )
+        ) {
+            this.player.setActive(false);
+            this.gotHit = true;
         }
 
         // if player got hit
         if (this.gotHit) {
-            vars.LIVES--;
+            vars.lives--;
 
-            if (vars.LIVES > 0) {
+            if (vars.lives > 0) {
                 this.scene.start("GameScene");
             } else {
-                this.scene.start("MainMenuScene");
+                // this.scene.start("MainMenuScene");
+                this.scene.start("GameScene");
             }
         }
 
-        if (this.asteroids.length === 0) {
-            this.scene.start("MainMenuScene");
+        if (this.gotHit) {
+            // this.scene.start("MainMenuScene");
+            this.scene.start("GameScene");
         }
     }
 }
